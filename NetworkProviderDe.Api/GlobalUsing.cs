@@ -1,0 +1,1 @@
+﻿global using static NetworkProviderDe.Domain.Services.GeographyService;
