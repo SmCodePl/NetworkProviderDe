@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetworkProviderDe.Domain;
 
@@ -11,9 +12,11 @@ using NetworkProviderDe.Domain;
 namespace NetworkProviderDe.Infrastructure.Migrations
 {
     [DbContext(typeof(NetProviderContext))]
-    partial class NetProviderContextModelSnapshot : ModelSnapshot
+    [Migration("20240728122306_ProductAreaUpdated")]
+    partial class ProductAreaUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,6 +110,9 @@ namespace NetworkProviderDe.Infrastructure.Migrations
                     b.Property<int>("Mrc")
                         .HasColumnType("int");
 
+                    b.Property<long?>("ProductAreaId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("ProductDescription")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -134,6 +140,8 @@ namespace NetworkProviderDe.Infrastructure.Migrations
 
                     b.HasKey("ProductId");
 
+                    b.HasIndex("ProductAreaId");
+
                     b.HasIndex("ProductTypeId");
 
                     b.ToTable("Product");
@@ -156,8 +164,6 @@ namespace NetworkProviderDe.Infrastructure.Migrations
                     b.HasKey("ProductAreaId");
 
                     b.HasIndex("AreaId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductArea");
                 });
@@ -188,6 +194,10 @@ namespace NetworkProviderDe.Infrastructure.Migrations
 
             modelBuilder.Entity("NetworkProviderDe.Domain.Entities.Product", b =>
                 {
+                    b.HasOne("NetworkProviderDe.Domain.Entities.ProductArea", null)
+                        .WithMany("Product")
+                        .HasForeignKey("ProductAreaId");
+
                     b.HasOne("NetworkProviderDe.Domain.Entities.ProductType", "ProductType")
                         .WithMany()
                         .HasForeignKey("ProductTypeId")
@@ -205,14 +215,11 @@ namespace NetworkProviderDe.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NetworkProviderDe.Domain.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Area");
+                });
 
+            modelBuilder.Entity("NetworkProviderDe.Domain.Entities.ProductArea", b =>
+                {
                     b.Navigation("Product");
                 });
 #pragma warning restore 612, 618

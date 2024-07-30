@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NetworkProviderDe.Domain.Entities;
 
-public class NetAreaFiberPlan
+public class ProductArea
 {
     [Key]
-    public long AreaFiberPlanId { get; set; }
+    public long ProductAreaId { get; set; }
     public NetArea Area { get; set; } = new();
-    public long PlanId { get; set; }
+    public Product Product { get; set; } = new();
 }

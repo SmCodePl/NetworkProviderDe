@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Design;
 using NetworkProviderDe.Domain;
 using NetworkProviderDe.Infrastructure;
+using NetworkProviderDe.Infrastructure.NetworkProviderDe.Domain.CompiledModels;
 
 namespace NetworkProviderDe.Api.DesignTime;
 
@@ -10,7 +11,7 @@ public class NetProviderContextFactory : IDesignTimeDbContextFactory<NetProvider
     private string AdminConnectionString => "NET_PROVIDER_ADMIN_CONNECTION_STRING";
     public NetProviderContext CreateDbContext(string[] args)
     {
-        // Get Connection string from environment variable
+        
         var connectionString = Environment.GetEnvironmentVariable(AdminConnectionString);
         
         if (string.IsNullOrWhiteSpace(connectionString))
@@ -23,7 +24,7 @@ public class NetProviderContextFactory : IDesignTimeDbContextFactory<NetProvider
             {
                 sqlOptions.MigrationsAssembly(
                     typeof(ServiceRegistation).Assembly.FullName);
-                sqlOptions.UseNetTopologySuite();
+                 sqlOptions.UseNetTopologySuite();
             });
 
         return new NetProviderContext(optionsBuilder.Options, new DesignTimeModelConfiguration());

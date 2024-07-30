@@ -1,0 +1,100 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject HttpClient Http
+
+<PageTitle>Home</PageTitle>
+
+
+<Div Margin="Margin.Is3">
+<Fields >
+    <Field Horizontal Margin="Blazorise.Margin.Is2">
+        <FieldLabel>Postal code</FieldLabel>
+            <TextEdit MaskType="MaskType.Numeric" @bind-Text="PostalCode">
+            <FieldHelp>Fiber net offered require valid German postal code</FieldHelp>
+        </TextEdit>
+    </Field>
+    
+</Fields>
+</Div>
+<LoadingIndicator @ref="loadingIndicator">
+
+</LoadingIndicator>
+@if (FiberNetResults != null && ShowPlans)
+{
+        <Div Margin="Margin.Is3">
+            <Fields Margin="Margin.Is2">
+                <Field ColumnSize="ColumnSize.Is6.OnDesktop">
+                    <FieldLabel>City</FieldLabel>
+                <TextEdit @bind-Text="FiberNetResults.placeName" ReadOnly />
+            </Field>
+                <Field ColumnSize="ColumnSize.Is6.OnDesktop">
+                    <FieldLabel>Region</FieldLabel>
+                <TextEdit @bind-Text="FiberNetResults.adminName" ReadOnly />
+                </Field>
+            </Fields>
+        </Div>
+
+    if (FiberNetResults.productResult.Count > 0)
+    {
+       <Div Margin="Margin.Is3">
+           <CardDeck>
+            @foreach (var item in FiberNetResults.productResult)
+            {
+                    if (item.isPromoted)
+                    {
+                        <Card>
+                            <CardBody>
+                                <CardTitle Size="3" Background="Background.Info">
+                                    Fiber @item.productName <Icon Name="IconName.Star" IconStyle="IconStyle.Solid"></Icon>
+                                </CardTitle>
+                                <CardText>
+                                    Download speed up to @item.speed Mb/s <br>
+                                    Upload speed up to @item.speed Mb/s <br>
+                                    @if (item.isUnlimited == true)
+                                    {
+                                        <span><b>Unlimited data transfer</b></span>
+                                    }
+                                </CardText>
+                            </CardBody>
+                        </Card>
+                    }
+                    else
+                    {
+                        <Card>
+                            <CardBody>
+                                <CardTitle Size="3"  Background="Background.Light">
+                                Fiber @item.productName 
+                                </CardTitle>
+                                <CardText>
+                                Download speed up to @item.speed Mb/s <br>
+                                Upload speed up to @item.speed Mb/s <br>
+                                @if (item.isUnlimited == true )
+                                {
+                                        <span><b>Unlimited data transfer</b></span>
+                                }
+                                </CardText>
+                            </CardBody>
+                        </Card>
+                    }
+       
+            }
+            </CardDeck>
+        </Div>
+    }
+}
+@* 
+
+<Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+    <JumbotronTitle Size="JumbotronTitleSize.Is4">@PostalCode </JumbotronTitle>
+    <JumbotronSubtitle>
+        This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.
+    </JumbotronSubtitle>
+    <Divider></Divider>
+    <Paragraph>
+        It uses utility classes for typography and spacing to space content out within the larger container.
+    </Paragraph>
+</Jumbotron> *@
+<Div Margin="Margin.Is3">
+    <button class="btn btn-primary" @onclick="OnButtonFindPostalCode">Click me</button>
+</Div>
+

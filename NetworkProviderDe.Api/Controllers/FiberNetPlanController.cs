@@ -18,20 +18,10 @@ namespace NetworkProviderDe.Api.Controllers
             _logger = logger;
             _fiberNetService = fiberNetService;
         }
-        // Get
-        [HttpGet]
-        public async Task<ActionResult<List<FiberNetPlan>>> GetAllNetPlans()
-        {
-            var result = await _fiberNetService.GetAllNetPlansAsync();
-
-            if (result == null || result.Count == 0)
-                return NotFound("No FiberNetPlans found");
-            else
-                return Ok(result);
-        }
+       
         // GET: FiberNetPlanByArea
         [HttpGet("FiberNetPlansByArea")]
-        public async Task<ActionResult<List<FiberNetResult>>> GetFiberNetPlan([FromQuery] string postalCode)
+        public async Task<ActionResult<FiberNetResult>> GetFiberNetPlan([FromQuery] string postalCode)
         {
             var result = await _fiberNetService.FindByPostalCodeAsync(postalCode);
             

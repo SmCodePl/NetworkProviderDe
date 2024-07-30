@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetworkProviderDe.Domain;
 
@@ -11,9 +12,11 @@ using NetworkProviderDe.Domain;
 namespace NetworkProviderDe.Infrastructure.Migrations
 {
     [DbContext(typeof(NetProviderContext))]
-    partial class NetProviderContextModelSnapshot : ModelSnapshot
+    [Migration("20240728124800_ProductAreaRelation")]
+    partial class ProductAreaRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

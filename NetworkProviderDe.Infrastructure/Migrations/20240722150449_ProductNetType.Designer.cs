@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetworkProviderDe.Domain;
 
@@ -11,9 +12,11 @@ using NetworkProviderDe.Domain;
 namespace NetworkProviderDe.Infrastructure.Migrations
 {
     [DbContext(typeof(NetProviderContext))]
-    partial class NetProviderContextModelSnapshot : ModelSnapshot
+    [Migration("20240722150449_ProductNetType")]
+    partial class ProductNetType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,13 +84,34 @@ namespace NetworkProviderDe.Infrastructure.Migrations
                     b.ToTable("NetArea");
                 });
 
-            modelBuilder.Entity("NetworkProviderDe.Domain.Entities.Product", b =>
+            modelBuilder.Entity("NetworkProviderDe.Domain.Entities.NetAreaFiberPlan", b =>
                 {
-                    b.Property<long>("ProductId")
+                    b.Property<long>("AreaFiberPlanId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ProductId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("AreaFiberPlanId"));
+
+                    b.Property<long>("AreaId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PlanId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("AreaFiberPlanId");
+
+                    b.HasIndex("AreaId");
+
+                    b.ToTable("NetAreaFiberPlan");
+                });
+
+            modelBuilder.Entity("NetworkProviderDe.Domain.Entities.Product", b =>
+                {
+                    b.Property<long>("PlanId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("PlanId"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -132,34 +156,11 @@ namespace NetworkProviderDe.Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ProductId");
+                    b.HasKey("PlanId");
 
                     b.HasIndex("ProductTypeId");
 
                     b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("NetworkProviderDe.Domain.Entities.ProductArea", b =>
-                {
-                    b.Property<long>("ProductAreaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ProductAreaId"));
-
-                    b.Property<long>("AreaId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ProductId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("ProductAreaId");
-
-                    b.HasIndex("AreaId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductArea");
                 });
 
             modelBuilder.Entity("NetworkProviderDe.Domain.Entities.ProductType", b =>
@@ -186,6 +187,17 @@ namespace NetworkProviderDe.Infrastructure.Migrations
                     b.ToTable("ProductType");
                 });
 
+            modelBuilder.Entity("NetworkProviderDe.Domain.Entities.NetAreaFiberPlan", b =>
+                {
+                    b.HasOne("NetworkProviderDe.Domain.Entities.NetArea", "Area")
+                        .WithMany()
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Area");
+                });
+
             modelBuilder.Entity("NetworkProviderDe.Domain.Entities.Product", b =>
                 {
                     b.HasOne("NetworkProviderDe.Domain.Entities.ProductType", "ProductType")
@@ -195,25 +207,6 @@ namespace NetworkProviderDe.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("ProductType");
-                });
-
-            modelBuilder.Entity("NetworkProviderDe.Domain.Entities.ProductArea", b =>
-                {
-                    b.HasOne("NetworkProviderDe.Domain.Entities.NetArea", "Area")
-                        .WithMany()
-                        .HasForeignKey("AreaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NetworkProviderDe.Domain.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Area");
-
-                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }

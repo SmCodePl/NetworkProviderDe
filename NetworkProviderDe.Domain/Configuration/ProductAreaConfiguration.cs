@@ -5,12 +5,12 @@ using NetworkProviderDe.Domain.Entities;
 
 namespace NetworkProviderDe.Domain.Configuration;
 
-internal class NetAreaFiberPlanConfiguration : IEntityTypeConfiguration<NetAreaFiberPlan>
+internal class ProductAreaConfiguration : IEntityTypeConfiguration<ProductArea>
 {
-    public void Configure(EntityTypeBuilder<NetAreaFiberPlan> builder)
+    public void Configure(EntityTypeBuilder<ProductArea> builder)
     {
         builder
-            .HasKey(p => p.AreaFiberPlanId);
+            .HasKey(p => p.ProductAreaId);
         
     }
 }
